@@ -1,0 +1,19 @@
+{
+  "name": "multimplaye-game-prototype",
+  "version": "1.0.0",
+  "description": "proto multiplayer game",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "watch": "node watch.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@types/ws": "^8.5.11",
+    "http-server": "^14.1.1",
+    "typescript": "^5.5.3",
+    "ws": "^8.18.0"
+  }
+}
