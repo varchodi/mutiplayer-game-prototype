@@ -1,2 +1,12 @@
+(async () => {
+    // from browser (the Websocket Interface, not same as the installed from nodejs)
+    const ws = new WebSocket("ws://localhost:6970");
+
+    // LISTENERS 
+    ws.addEventListener("close", (event) => console.log(`WEBSOCKET CLOSE, ${event}`));
+    ws.addEventListener("error", (event) => console.log(`WEBSOCKET ERRPR, ${event}`));
+    ws.addEventListener("message", (event) => console.log(`WEBSOCKET MESSAGE, ${event}`));
+    ws.addEventListener("open", (event) => console.log(`WEBSOCKET OPEN, ${event}`));
+})();
+
 console.log("hello bro cool");
-let cool;
