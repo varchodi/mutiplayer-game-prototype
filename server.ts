@@ -1,6 +1,14 @@
-import { WebSocketServer } from 'ws';
+import { WebSocketServer,WebSocket } from 'ws';
+import { SERVER_PORT, WORLD_HEIGHT, WORLD_WIDTH } from './common.js';
 
-const SERVER_PORT = 6970;
+
+
+type Player = {
+    x: number,
+    y: number,
+};
+
+const players= new Map<WebSocket,Player>();
 
 
 const wws = new WebSocketServer({
@@ -8,6 +16,14 @@ const wws = new WebSocketServer({
 });
 
 wws.on('connection', (ws) => {
+    const player = {
+        x: Math.random() * WORLD_WIDTH,
+        y: Math.random() * WORLD_HEIGHT
+    }
+
+    //register the player
+    players.set(ws, player);
+    
     console.log(`Samebody connected!`)
 })
 
