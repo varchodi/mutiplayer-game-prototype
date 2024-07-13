@@ -17,7 +17,7 @@ wws.on('connection', (ws) => {
     console.log(`Player ${id} connected!`);
     // send respose to client;
     ws.send(JSON.stringify({
-        kind: "hello",
+        kind: "Hello",
         id,
     }));
     ws.on("close", () => {

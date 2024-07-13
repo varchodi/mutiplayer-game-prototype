@@ -30,7 +30,7 @@ wws.on('connection', (ws:WebSocket) => {
     console.log(`Player ${id} connected!`);
     // send respose to client;
     ws.send(JSON.stringify({
-        kind: "hello",
+        kind: "Hello",
         id,
     }))
 
