@@ -1,4 +1,4 @@
-import { isHello, isPlayerJoined, isPlayerLeft, PLAYER_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./common.js";
+import { DEFAULT_MOVING, isHello, isPlayerJoined, isPlayerLeft, PLAYER_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./common.js";
 (async () => {
     const gamecanvas = document.getElementById("game");
     if (gamecanvas === null)
@@ -38,12 +38,7 @@ import { isHello, isPlayerJoined, isPlayerLeft, PLAYER_SIZE, WORLD_HEIGHT, WORLD
                     id: message.id,
                     x: message.x,
                     y: message.y,
-                    moving: {
-                        left: false,
-                        right: false,
-                        down: false,
-                        up: false,
-                    }
+                    moving: DEFAULT_MOVING,
                 });
             }
             //  ?? if player left

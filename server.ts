@@ -1,5 +1,5 @@
 import { WebSocketServer,WebSocket } from 'ws';
-import { Event, Player, SERVER_PORT, WORLD_HEIGHT, WORLD_WIDTH } from './common.js';
+import { DEFAULT_MOVING, Event, Player, SERVER_PORT, WORLD_HEIGHT, WORLD_WIDTH } from './common.js';
 
 const SERVER_FPS = 30;
 
@@ -25,12 +25,7 @@ wws.on('connection', (ws:WebSocket) => {
     const y = Math.random() * WORLD_HEIGHT;
     const player:PlayerWithSocket = {
         ws, id, x, y,
-        moving: {
-            left: false,
-            right:false,
-            down: false,
-            up:false,
-        }
+        moving:DEFAULT_MOVING,
      };
 
     //register the player

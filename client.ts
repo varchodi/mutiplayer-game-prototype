@@ -1,4 +1,4 @@
-import { Hello, isHello, isPlayerJoined, isPlayerLeft, PLAYER_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./common.js";
+import { DEFAULT_MOVING, Hello, isHello, isPlayerJoined, isPlayerLeft, PLAYER_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./common.js";
 import { Player } from "./common.js";
 
 (async () => {
@@ -42,12 +42,7 @@ import { Player } from "./common.js";
                     id: message.id,
                     x: message.x,
                     y: message.y,
-                    moving: {
-                        left: false,
-                        right:false,
-                        down: false,
-                        up:false,
-                    }
+                    moving:DEFAULT_MOVING,
                 })
             }
             //  ?? if player left
