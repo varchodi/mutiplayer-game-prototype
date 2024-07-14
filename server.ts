@@ -1,16 +1,14 @@
 import { WebSocketServer,WebSocket } from 'ws';
-import { PlayerJoined, SERVER_PORT, WORLD_HEIGHT, WORLD_WIDTH } from './common.js';
+import { Player, PlayerJoined, SERVER_PORT, WORLD_HEIGHT, WORLD_WIDTH } from './common.js';
 
 const SERVER_FPS = 30;
 
-type Player = {
-    ws:WebSocket,
-    id:number,
-    x: number,
-    y: number,
-};
 
-const players = new Map<number, Player>();
+export interface PlayerWithSocket extends Player{
+    ws:WebSocket,
+}
+
+const players = new Map<number, PlayerWithSocket>();
 let idCounter = 0;
 
 
@@ -60,7 +58,7 @@ function tick() {
                     id:joinedPlayer.id,
                 }));
                 const eventString = JSON.stringify(event);
-                // !! notify  when new joined _n change current state (add in game ??)
+                // !! notify new player  when  joined _n change current state (add in game ??,plus_others)
                 players.forEach((otherPlayer) => {
                     joinedPlayer.ws.send(JSON.stringify({
                         kind: 'PlayerJoined',

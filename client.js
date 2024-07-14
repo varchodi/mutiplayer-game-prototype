@@ -1,8 +1,9 @@
-import { isHello } from "./common.js";
+import { isHello, isPlayerJoined } from "./common.js";
 (async () => {
     // from browser (the Websocket Interface, not same as the installed from nodejs)
     const ws = new WebSocket("ws://localhost:6970");
     let myId = undefined;
+    const players = new Map();
     // LISTENERS 
     ws.addEventListener("close", (event) => console.log("WEBSOCKET CLOSE", event));
     ws.addEventListener("error", (event) => {
@@ -20,9 +21,15 @@ import { isHello } from "./common.js";
                 ws.close();
             }
         }
-        // already being created
+        // already being created (or joined)
         else {
-            console.log("WEBSOCKET CONNECT,", event);
+            const message = JSON.parse(event.data);
+            if (isPlayerJoined(message)) {
+            }
+            else {
+                console.log("received bogus-amogus message from server", message);
+                ws.close();
+            }
         }
     });
     ws.addEventListener("open", (event) => console.log("WEBSOCKET OPEN,", event));
