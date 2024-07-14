@@ -8,6 +8,12 @@ export const DEFAULT_MOVING = {
     down: false,
     up: false,
 };
+export const DIRECTION_VECTOR = {
+    left: { x: -1, y: 0 },
+    right: { x: 1, y: 0 },
+    down: { x: 0, y: -1 },
+    up: { x: 0, y: 1 },
+};
 // type checker helper functions
 function isNumber(arg) {
     return typeof (arg) === 'number';
@@ -34,5 +40,20 @@ export function isPlayerLeft(arg) {
 // PlayerMoving  type guard checker fxs
 export function isPlayerMoving(arg) {
     return arg && arg.kind === 'PlayerMoving' && isNumber(arg.id) && isBoolean(arg.start) && isDirection(arg.direction);
+}
+// ?? will  be used in bith client _n server
+function updatePlayer(player, deltaTime) {
+    let dir;
+    let dx = 0;
+    let dy = 0;
+    for (dir in DIRECTION_VECTOR) {
+        // if moving in dir 
+        if (player.moving[dir]) {
+            dx += DIRECTION_VECTOR[dir].x;
+            dy += DIRECTION_VECTOR[dir].y;
+        }
+    }
+    player.x = dx * deltaTime;
+    player.y = dy * deltaTime;
 }
 //# sourceMappingURL=common.js.map

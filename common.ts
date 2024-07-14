@@ -16,6 +16,15 @@ export const DEFAULT_MOVING: Moving = {
     up: false,
 };
 
+export type Vector2 = { x: number, y: number };
+
+export const DIRECTION_VECTOR: { [key in Direction]: Vector2 } = {
+    left: {x:-1,y:0},
+    right: {x:1,y:0},
+    down: { x: 0, y: -1},
+    up: {x:0,y:1},
+};
+
 export type Player = {
     id:number,
     x: number,
@@ -79,4 +88,20 @@ export function isPlayerMoving(arg: any): arg is PlayerMoving {
     return arg && arg.kind === 'PlayerMoving' && isNumber(arg.id) && isBoolean(arg.start) && isDirection(arg.direction);
 }
 
-export type Event = PlayerJoined | PlayerLeft;
+export type Event = PlayerJoined | PlayerLeft | PlayerMoving;
+
+// ?? will  be used in bith client _n server
+function updatePlayer(player: Player, deltaTime: number) {
+    let dir: Direction;
+    let dx = 0;
+    let dy = 0;
+    for (dir in DIRECTION_VECTOR) {
+        // if moving in dir 
+        if (player.moving[dir]) {
+            dx += DIRECTION_VECTOR[dir].x;
+            dy += DIRECTION_VECTOR[dir].y;
+        }
+    }
+    player.x = dx * deltaTime;
+    player.y = dy * deltaTime;
+}
