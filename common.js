@@ -42,7 +42,7 @@ export function isPlayerMoving(arg) {
     return arg && arg.kind === 'PlayerMoving' && isNumber(arg.id) && isBoolean(arg.start) && isDirection(arg.direction);
 }
 // ?? will  be used in bith client _n server
-function updatePlayer(player, deltaTime) {
+export function updatePlayer(player, deltaTime) {
     let dir;
     let dx = 0;
     let dy = 0;

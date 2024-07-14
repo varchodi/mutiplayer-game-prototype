@@ -91,7 +91,7 @@ export function isPlayerMoving(arg: any): arg is PlayerMoving {
 export type Event = PlayerJoined | PlayerLeft | PlayerMoving;
 
 // ?? will  be used in bith client _n server
-function updatePlayer(player: Player, deltaTime: number) {
+export function updatePlayer(player: Player, deltaTime: number) {
     let dir: Direction;
     let dx = 0;
     let dy = 0;

@@ -1,5 +1,5 @@
 import { WebSocketServer } from 'ws';
-import { DEFAULT_MOVING, SERVER_PORT, WORLD_HEIGHT, WORLD_WIDTH } from './common.js';
+import { DEFAULT_MOVING, isPlayerMoving, SERVER_PORT, updatePlayer, WORLD_HEIGHT, WORLD_WIDTH } from './common.js';
 const SERVER_FPS = 30;
 const players = new Map();
 let idCounter = 0;
@@ -25,7 +25,21 @@ wws.on('connection', (ws) => {
         id, x, y
     });
     // !! on message
-    ws.on('message', () => {
+    ws.on('message', (data) => {
+        const message = JSON.parse(data.toString());
+        if (isPlayerMoving(message)) {
+            // ? quick unregistred user( wrong id players)
+            if (message.id !== id) {
+                console.log(`Player ${id} tried to chat by sending message ${message}`);
+                ws.close();
+                // players.delete(message.id);
+            }
+            eventQueue.push(message);
+        }
+        else {
+            console.log("received bogus-amogus message from client %s %S", id, message);
+            ws.close();
+        }
     });
     // ! player disconnect
     ws.on("close", () => {
@@ -64,7 +78,7 @@ function tick() {
                     }
                 });
                 break;
-            // player left
+            // Player left
             case 'PlayerLeft':
                 // ?? notif all players
                 const eventStrings = JSON.stringify(event);
@@ -72,10 +86,22 @@ function tick() {
                     player.ws.send(eventStrings);
                 });
                 break;
+            // Player Moving 
+            case 'PlayerMoving':
+                const MoveEventStrings = JSON.stringify(event);
+                const player = players.get(event.id);
+                if (player === undefined)
+                    continue;
+                player.moving[event.direction] = event.start;
+                // notify others 
+                players.forEach(player => player.ws.send(MoveEventStrings));
+                break;
         }
     }
     // ? clear up queue;
     eventQueue.length = 0;
+    // ?? phys on players
+    players.forEach((player) => updatePlayer(player, 1 / SERVER_FPS));
     setTimeout(tick, 1000 / SERVER_FPS);
 }
 setTimeout(tick, 1000 / SERVER_FPS);
