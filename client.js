@@ -1,5 +1,14 @@
-import { isHello, isPlayerJoined } from "./common.js";
+import { isHello, isPlayerJoined, PLAYER_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./common.js";
 (async () => {
+    const gamecanvas = document.getElementById("game");
+    if (gamecanvas === null)
+        throw new Error(`No Element with id 'game'`);
+    gamecanvas.width = WORLD_WIDTH;
+    gamecanvas.height = WORLD_HEIGHT;
+    const ctx = gamecanvas.getContext('2d');
+    if (ctx === null)
+        throw new Error('2d canvas is not supported');
+    ctx;
     // from browser (the Websocket Interface, not same as the installed from nodejs)
     const ws = new WebSocket("ws://localhost:6970");
     let myId = undefined;
@@ -25,6 +34,11 @@ import { isHello, isPlayerJoined } from "./common.js";
         else {
             const message = JSON.parse(event.data);
             if (isPlayerJoined(message)) {
+                players.set(message.id, {
+                    id: message.id,
+                    x: message.x,
+                    y: message.y
+                });
             }
             else {
                 console.log("received bogus-amogus message from server", message);
@@ -33,6 +47,24 @@ import { isHello, isPlayerJoined } from "./common.js";
         }
     });
     ws.addEventListener("open", (event) => console.log("WEBSOCKET OPEN,", event));
+    let previousTimestamp = 0;
+    const frame = (timestamp) => {
+        const deltaTime = (timestamp - previousTimestamp) / 1000;
+        previousTimestamp = timestamp;
+        // style canvas color
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        // draw players
+        ctx.fillStyle = 'red';
+        players.forEach((player) => {
+            ctx.fillRect(player.x, player.y, PLAYER_SIZE, PLAYER_SIZE);
+        });
+        window.requestAnimationFrame(frame);
+    };
+    window.requestAnimationFrame((timestamp) => {
+        previousTimestamp = timestamp;
+        window.requestAnimationFrame(frame);
+    });
 })();
 console.log("hello bro cool");
 //# sourceMappingURL=client.js.map
