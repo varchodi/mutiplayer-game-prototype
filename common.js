@@ -11,6 +11,6 @@ export function isHello(arg) {
 }
 // PlayerJoinded  type guard checker fxs
 export function isPlayerJoined(arg) {
-    return arg && arg.kind === 'PlayerJoined' && isNumber(arg.id) && isNumber(arg.x) && isNumber(arg.y);
+    return arg && arg.kind === 'PlayerJoined' && isNumber(arg.id) && isNumber(arg.x) && isNumber(arg.y) && arg.ws instanceof WebSocket;
 }
 //# sourceMappingURL=common.js.map
