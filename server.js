@@ -35,13 +35,27 @@ function tick() {
     for (let event of eventQueue) {
         switch (event.kind) {
             case 'PlayerJoined':
-                const player = players.get(event.id);
-                if (player === undefined)
+                const joinedPlayer = players.get(event.id);
+                if (joinedPlayer === undefined)
                     continue;
-                player.ws.send(JSON.stringify({
+                joinedPlayer.ws.send(JSON.stringify({
                     kind: "Hello",
-                    id: player.id,
+                    id: joinedPlayer.id,
                 }));
+                const eventString = JSON.stringify(event);
+                // !! notify  when new joined _n change current state (add in game ??)
+                players.forEach((otherPlayer) => {
+                    joinedPlayer.ws.send(JSON.stringify({
+                        kind: 'PlayerJoined',
+                        id: otherPlayer.id,
+                        x: otherPlayer.x,
+                        y: otherPlayer.y
+                    }));
+                    // !! notif other player states
+                    if (otherPlayer.id !== joinedPlayer.id) {
+                        otherPlayer.ws.send(eventString);
+                    }
+                });
                 break;
         }
     }
