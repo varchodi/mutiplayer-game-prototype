@@ -1,4 +1,4 @@
-import { Hello, isHello, isPlayerJoined, PLAYER_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./common.js";
+import { Hello, isHello, isPlayerJoined, isPlayerLeft, PLAYER_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./common.js";
 import { Player } from "./common.js";
 
 (async () => {
@@ -24,7 +24,7 @@ import { Player } from "./common.js";
         console.log("WEBSOCKET ERROR,", event)
     });
     ws.addEventListener("message", (event) => {
-        if(myId === undefined){
+        if(myId === undefined){ 
         const message = JSON.parse(event.data);
             if (isHello(message)) {
                 myId = message.id;
@@ -41,9 +41,20 @@ import { Player } from "./common.js";
                 players.set(message.id, {
                     id: message.id,
                     x: message.x,
-                    y:message.y
+                    y: message.y,
+                    moving: {
+                        left: false,
+                        right:false,
+                        down: false,
+                        up:false,
+                    }
                 })
-            } else {
+            }
+            //  ?? if player left
+            else if (isPlayerLeft(message)) {
+                players.delete(message.id);
+            }
+            else {
                 console.log("received bogus-amogus message from server", message);
                 ws.close();
             }

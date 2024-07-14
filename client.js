@@ -1,4 +1,4 @@
-import { isHello, isPlayerJoined, PLAYER_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./common.js";
+import { isHello, isPlayerJoined, isPlayerLeft, PLAYER_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from "./common.js";
 (async () => {
     const gamecanvas = document.getElementById("game");
     if (gamecanvas === null)
@@ -37,8 +37,18 @@ import { isHello, isPlayerJoined, PLAYER_SIZE, WORLD_HEIGHT, WORLD_WIDTH } from 
                 players.set(message.id, {
                     id: message.id,
                     x: message.x,
-                    y: message.y
+                    y: message.y,
+                    moving: {
+                        left: false,
+                        right: false,
+                        down: false,
+                        up: false,
+                    }
                 });
+            }
+            //  ?? if player left
+            else if (isPlayerLeft(message)) {
+                players.delete(message.id);
             }
             else {
                 console.log("received bogus-amogus message from server", message);

@@ -12,7 +12,15 @@ wws.on('connection', (ws) => {
     const id = idCounter++;
     const x = Math.random() * WORLD_WIDTH;
     const y = Math.random() * WORLD_HEIGHT;
-    const player = { ws, id, x, y };
+    const player = {
+        ws, id, x, y,
+        moving: {
+            left: false,
+            right: false,
+            down: false,
+            up: false,
+        }
+    };
     //register the player
     players.set(id, player);
     console.log(`Player ${id} connected!`);
@@ -28,6 +36,10 @@ wws.on('connection', (ws) => {
     ws.on("close", () => {
         console.log(`player ${id} disconnected`);
         players.delete(id);
+        eventQueue.push({
+            kind: 'PlayerLeft',
+            id
+        });
     });
 });
 //?? game kinda loop
@@ -55,6 +67,14 @@ function tick() {
                     if (otherPlayer.id !== joinedPlayer.id) {
                         otherPlayer.ws.send(eventString);
                     }
+                });
+                break;
+            // player left
+            case 'PlayerLeft':
+                // ?? notif all players
+                const eventStrings = JSON.stringify(event);
+                players.forEach((player) => {
+                    player.ws.send(eventStrings);
                 });
                 break;
         }

@@ -1,5 +1,5 @@
 import { WebSocketServer,WebSocket } from 'ws';
-import { Player, PlayerJoined, SERVER_PORT, WORLD_HEIGHT, WORLD_WIDTH } from './common.js';
+import { Event, Player, SERVER_PORT, WORLD_HEIGHT, WORLD_WIDTH } from './common.js';
 
 const SERVER_FPS = 30;
 
@@ -17,13 +17,21 @@ const wws = new WebSocketServer({
 });
 
 // ??
-let eventQueue:Array<PlayerJoined>=[];
+let eventQueue:Array<Event>=[];
 
 wws.on('connection', (ws:WebSocket) => {
     const id = idCounter++;
     const x = Math.random() * WORLD_WIDTH;
     const y = Math.random() * WORLD_HEIGHT;
-    const player = { ws,id, x, y };
+    const player:PlayerWithSocket = {
+        ws, id, x, y,
+        moving: {
+            left: false,
+            right:false,
+            down: false,
+            up:false,
+        }
+     };
 
     //register the player
     players.set(id, player);
@@ -41,6 +49,10 @@ wws.on('connection', (ws:WebSocket) => {
     ws.on("close", () => {
         console.log(`player ${id} disconnected`);
         players.delete(id);
+        eventQueue.push({
+            kind: 'PlayerLeft',
+            id
+        })
     });
 
 })
@@ -71,6 +83,15 @@ function tick() {
                     if (otherPlayer.id !== joinedPlayer.id) {
                         otherPlayer.ws.send(eventString);
                     }
+                })
+                break;
+            
+            // player left
+            case 'PlayerLeft':
+                // ?? notif all players
+                 const eventStrings = JSON.stringify(event);
+                players.forEach((player) =>{
+                    player.ws.send(eventStrings);
                 })
                 break;
         }
