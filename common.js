@@ -39,7 +39,11 @@ export function isPlayerLeft(arg) {
 }
 // PlayerMoving  type guard checker fxs
 export function isPlayerMoving(arg) {
-    return arg && arg.kind === 'PlayerMoving' && isNumber(arg.id) && isBoolean(arg.start) && isDirection(arg.direction);
+    return arg && arg.kind === 'PlayerMoving' && isNumber(arg.id) && isNumber(arg.x) && isNumber(arg.y) && isBoolean(arg.start) && isDirection(arg.direction);
+}
+// AmmaMoving  type guard checker fxs
+export function isAmmaMoving(arg) {
+    return arg && arg.kind === 'AmmaMoving' && isBoolean(arg.start) && isDirection(arg.direction);
 }
 // ?? will  be used in bith client _n server
 export function updatePlayer(player, deltaTime) {

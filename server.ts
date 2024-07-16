@@ -1,5 +1,5 @@
 import { WebSocketServer,WebSocket } from 'ws';
-import { DEFAULT_MOVING, Event, isPlayerMoving, Player, SERVER_PORT, updatePlayer, WORLD_HEIGHT, WORLD_WIDTH } from './common.js';
+import { DEFAULT_MOVING, Event, isAmmaMoving, isPlayerMoving, Player, SERVER_PORT, updatePlayer, WORLD_HEIGHT, WORLD_WIDTH } from './common.js';
 
 const SERVER_FPS = 30;
 
@@ -39,14 +39,16 @@ wws.on('connection', (ws:WebSocket) => {
     // !! on message
     ws.on('message', (data) => {
         const message = JSON.parse(data.toString());
-        if (isPlayerMoving(message)) {
-            // ? quick unregistred user( wrong id players)
-            if (message.id !== id) {
-                console.log(`Player ${id} tried to chat by sending message ${message}`);
-                ws.close();
-                // players.delete(message.id);
-            }
-            eventQueue.push(message);
+        if (isAmmaMoving(message)) {
+            eventQueue.push({
+                kind: 'PlayerMoving',
+                id,
+                x: player.x,
+                y: player.y,
+                start: message.start,
+                direction:message.direction
+            });
+            
         } else {
             console.log("received bogus-amogus message from client %s %S",id, message);
             ws.close();

@@ -75,20 +75,34 @@ export interface PlayerLeft {
 export function isPlayerLeft(arg: any): arg is Player {
     return arg && arg.kind === 'PlayerLeft' && isNumber(arg.id);
 }
-
-//  Player Moving
-export interface PlayerMoving{
-    kind: 'PlayerMoving',
-    id: number,
+// Player Moving (client -> server)
+export interface AmmaMoving{
+    kind: 'AmmaMoving',
     start: boolean,
     direction:Direction,
 }
-// PlayerMoving  type guard checker fxs
-export function isPlayerMoving(arg: any): arg is PlayerMoving {
-    return arg && arg.kind === 'PlayerMoving' && isNumber(arg.id) && isBoolean(arg.start) && isDirection(arg.direction);
+
+//  Player Moving (server -> rest_of_clients)
+export interface PlayerMoving{
+    kind: 'PlayerMoving',
+    id: number,
+    x: number,
+    y: number,
+    start: boolean,
+    direction:Direction,
 }
 
-export type Event = PlayerJoined | PlayerLeft | PlayerMoving;
+// PlayerMoving  type guard checker fxs
+export function isPlayerMoving(arg: any): arg is PlayerMoving {
+    return arg && arg.kind === 'PlayerMoving' && isNumber(arg.id) && isNumber(arg.x) && isNumber(arg.y) && isBoolean(arg.start) && isDirection(arg.direction);
+}
+
+// AmmaMoving  type guard checker fxs
+export function isAmmaMoving(arg: any): arg is AmmaMoving {
+    return arg && arg.kind === 'AmmaMoving'  && isBoolean(arg.start) && isDirection(arg.direction);
+}
+
+export type Event = PlayerJoined | PlayerLeft | PlayerMoving |AmmaMoving;
 
 // ?? will  be used in bith client _n server
 export function updatePlayer(player: Player, deltaTime: number) {
