@@ -35,7 +35,12 @@ wws.on("connection", (ws: WebSocket) => {
     id,
     x,
     y,
-    moving: DEFAULT_MOVING,
+    moving: {
+      left: false,
+      right: false,
+      up: false,
+      down: false,
+    },
   };
 
   //register the player

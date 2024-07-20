@@ -44,7 +44,7 @@ function isBoolean(arg: any): arg is boolean {
 
 function isDirection(arg: any): arg is Direction {
   // check if all keys r avalaible
-  return DEFAULT_MOVING[arg as Direction] !== undefined;
+  return DIRECTION_VECTOR[arg as Direction] !== undefined;
 }
 export interface Hello {
   kind: "Hello";

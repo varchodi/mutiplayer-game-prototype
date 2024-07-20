@@ -64,7 +64,12 @@ const DIRECTION_KEYS: { [key: string]: Direction } = {
           id: message.id,
           x: message.x,
           y: message.y,
-          moving: DEFAULT_MOVING,
+          moving: {
+            left: false,
+            right: false,
+            up: false,
+            down: false,
+          },
         });
       }
       //  ?? if player left
