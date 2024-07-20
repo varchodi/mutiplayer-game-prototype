@@ -52,6 +52,7 @@ wws.on("connection", (ws: WebSocket) => {
   ws.on("message", (data) => {
     const message = JSON.parse(data.toString());
     if (isAmmaMoving(message)) {
+      console.log(`id:${id} -`, message);
       eventQueue.push({
         kind: "PlayerMoving",
         id,
@@ -129,11 +130,11 @@ function tick() {
       // Player Moving
       case "PlayerMoving":
         {
-          const eventString = JSON.stringify(event);
           const player = players.get(event.id);
           if (player === undefined) continue;
           player.moving[event.direction] = event.start;
           // notify others
+          const eventString = JSON.stringify(event);
           players.forEach((player) => player.ws.send(eventString));
         }
         break;
