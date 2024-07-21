@@ -31,6 +31,7 @@ export type Player = {
   x: number;
   y: number;
   moving: Moving;
+  style: string;
 };
 
 // type checker helper functions
