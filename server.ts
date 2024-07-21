@@ -28,13 +28,14 @@ let eventQueue: Array<Event> = [];
 
 // generate style
 function randomStyle(): string {
-  return `hsv(${Math.floor(Math.random() * 360)}, 80%, 50%)`;
+  return `hsl(${Math.floor(Math.random() * 360)} 80% 50%)`;
 }
 
 wws.on("connection", (ws: WebSocket) => {
   const id = idCounter++;
   const x = Math.random() * WORLD_WIDTH;
   const y = Math.random() * WORLD_HEIGHT;
+  const style = randomStyle();
   const player: PlayerWithSocket = {
     ws,
     id,
@@ -46,7 +47,7 @@ wws.on("connection", (ws: WebSocket) => {
       up: false,
       down: false,
     },
-    style: randomStyle(),
+    style,
   };
 
   //register the player
@@ -58,6 +59,7 @@ wws.on("connection", (ws: WebSocket) => {
     id,
     x,
     y,
+    style: style,
   });
   // !! on message
   ws.on("message", (data) => {

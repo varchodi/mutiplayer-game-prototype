@@ -70,6 +70,7 @@ const DIRECTION_KEYS: { [key: string]: Direction } = {
             up: false,
             down: false,
           },
+          style: message.style,
         });
       }
       //  ?? if player left
@@ -107,8 +108,8 @@ const DIRECTION_KEYS: { [key: string]: Direction } = {
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     // draw players
-    ctx.fillStyle = "red";
     players.forEach((player) => {
+      ctx.fillStyle = player.style;
       updatePlayer(player, deltaTime);
       ctx.fillRect(player.x, player.y, PLAYER_SIZE, PLAYER_SIZE);
     });

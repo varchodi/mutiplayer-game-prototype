@@ -43,6 +43,10 @@ function isBoolean(arg: any): arg is boolean {
   return typeof arg === "boolean";
 }
 
+function isString(arg: any): arg is string {
+  return typeof arg === "string";
+}
+
 function isDirection(arg: any): arg is Direction {
   // check if all keys r avalaible
   return DIRECTION_VECTOR[arg as Direction] !== undefined;
@@ -62,6 +66,7 @@ export interface PlayerJoined {
   id: number;
   x: number;
   y: number;
+  style: string;
 }
 // PlayerJoinded  type guard checker fxs
 export function isPlayerJoined(arg: any): arg is Player {
@@ -70,7 +75,8 @@ export function isPlayerJoined(arg: any): arg is Player {
     arg.kind === "PlayerJoined" &&
     isNumber(arg.id) &&
     isNumber(arg.x) &&
-    isNumber(arg.y)
+    isNumber(arg.y) &&
+    arg.style
   );
 }
 
