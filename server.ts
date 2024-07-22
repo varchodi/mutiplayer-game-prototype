@@ -112,6 +112,7 @@ function tick() {
           const eventString = JSON.stringify(event);
           // !! notify new player  when  joined _n change current state (add in game ??,plus_others)
           players.forEach((otherPlayer) => {
+            // !! TODO: amke it more typy safe
             joinedPlayer.ws.send(
               JSON.stringify({
                 kind: "PlayerJoined",

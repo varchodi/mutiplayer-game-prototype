@@ -132,6 +132,10 @@ export function isAmmaMoving(arg: any): arg is AmmaMoving {
 
 export type Event = PlayerJoined | PlayerLeft | PlayerMoving | AmmaMoving;
 
+function properMode(a: number, b: number): number {
+  return ((a % b) + b) % b;
+}
+
 // ?? will  be used in bith client _n server
 export function updatePlayer(player: Player, deltaTime: number) {
   let dir: Direction;
@@ -144,7 +148,7 @@ export function updatePlayer(player: Player, deltaTime: number) {
       dy += DIRECTION_VECTOR[dir].y;
     }
   }
-  player.x += dx * PLAYER_SPEED * deltaTime;
-  player.y += dy * PLAYER_SPEED * deltaTime;
+  player.x = properMode(player.x + dx * PLAYER_SPEED * deltaTime, WORLD_WIDTH);
+  player.y = properMode(player.y + dy * PLAYER_SPEED * deltaTime, WORLD_HEIGHT);
   //   console.log(`player ${player.id}: ${player.x},${player.y}`);
 }
