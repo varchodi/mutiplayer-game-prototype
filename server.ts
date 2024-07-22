@@ -59,7 +59,7 @@ wws.on("connection", (ws: WebSocket) => {
     id,
     x,
     y,
-    style: style,
+    style,
   });
   // !! on message
   ws.on("message", (data) => {
@@ -118,6 +118,7 @@ function tick() {
                 id: otherPlayer.id,
                 x: otherPlayer.x,
                 y: otherPlayer.y,
+                style: otherPlayer.style,
               })
             );
 
