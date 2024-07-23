@@ -11,7 +11,7 @@ import {
 } from "./common.js";
 
 const SERVER_FPS = 30;
-const SERVER_LIMIT = 69;
+const SERVER_LIMIT = 5;
 
 export interface PlayerWithSocket extends Player {
   ws: WebSocket;
@@ -34,7 +34,7 @@ function randomStyle(): string {
 
 wws.on("connection", (ws: WebSocket) => {
   // limit connection to SERVER_LIMIT
-  if (players.size >= 56) {
+  if (players.size >= SERVER_LIMIT) {
     ws.close();
     return;
   }
